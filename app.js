@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const ejs = require('ejs');
+const encrypt = require("mongoose-encryption");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -15,6 +16,10 @@ const secretSchema = new mongoose.Schema({
   username:String,
   password:String
 });
+
+const secret="i m invincible";
+
+secretSchema.plugin(encrypt,{secret:secret ,encryptedFields:["password"]});
 
 const Secret = mongoose.model("Secret", secretSchema);
 
@@ -29,6 +34,7 @@ app.get("/login", function(req, res){
 app.get("/register", function(req, res){
   res.render("register");
 });
+
 
 
 app.post("/register", function(req,res){
@@ -59,7 +65,6 @@ app.post("/login", function(req, res){
     else console.log(err);
   });
 });
-
 
 
 
